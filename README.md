@@ -2,6 +2,7 @@
 
  - Spring boot
  - Spring Hibernate Validation
- - Transaction ACID
+ - Transaction ACID WITH VERSION
  - RFC Problem Detail
+ - JPA Projection
 

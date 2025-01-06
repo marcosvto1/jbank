@@ -2,12 +2,11 @@ package teamdev.tech.jbank.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import teamdev.tech.jbank.controllers.dtos.CreateWalletDto;
-import teamdev.tech.jbank.controllers.dtos.DepositAmountDto;
+import teamdev.tech.jbank.controllers.dtos.*;
 import teamdev.tech.jbank.entities.Wallet;
+import teamdev.tech.jbank.repositories.dto.StatementView;
 import teamdev.tech.jbank.services.DepositService;
 import teamdev.tech.jbank.services.WalletService;
 
@@ -19,7 +18,6 @@ import java.util.UUID;
 public class WalletController {
     private final WalletService walletService;
     private final DepositService depositService;
-
 
     public WalletController(WalletService walletService, DepositService depositService) {
         this.walletService = walletService;
@@ -58,5 +56,20 @@ public class WalletController {
         );
 
         return ResponseEntity.created(URI.create("/wallets/" + walletId + "/deposits/" + deposit.getId())).build();
+    }
+
+    @GetMapping("/{walletId}/statements")
+    public ResponseEntity<StatementDto> findStatements(
+            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+            @RequestParam(value = "pageNumber", defaultValue = "0") Integer pageNumber,
+            @PathVariable("walletId") UUID walletId
+    ) {
+        var statementDto =this.walletService.findAll(
+                pageNumber, pageSize, walletId
+        );
+
+        return ResponseEntity.ok(
+              statementDto
+        );
     }
 }
